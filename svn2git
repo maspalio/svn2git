@@ -17,6 +17,7 @@ GetOptions(
     "trunk:s", "branches:s", "tags:s", "authors:s",
     "clone!",
     "strip-tag-prefix:s",
+    "force-tag",
     "verbose|v",
 );
 
@@ -34,6 +35,7 @@ svn2git - Convert Subversion repositories to git
             [--authors=AUTHORS_FILE]
             [--trunk=TRUNK_PATH] [--branches=BRANCHES_PATH] [--tags=TAGS_PATH]
             [--strip-tag-prefix=TAG_PREFIX]
+            [--force-tag]
             SVN_URL
 
 =head1 DESCRIPTION
@@ -91,6 +93,10 @@ a standard Subversion layout is assumed.
 A prefix to strip off all tags.  For example,
 C<<--strip-tag-prefix=release->> would turn "release-1.2.3" into
 "1.2.3".
+
+=head3 --force-tag
+
+Force git tag operations.
 
 =head1 EXAMPLES
 
@@ -192,7 +198,7 @@ sub fix_tags {
         }
 
         run("git", "checkout", $branch);
-        run("git", "tag", $tag);
+        run("git", "tag", $Opts{'force-tag'} ? ( "-f", $tag ) : $tag);
     }
 }
 
